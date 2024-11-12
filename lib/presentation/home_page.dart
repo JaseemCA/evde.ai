@@ -1,4 +1,4 @@
-// ignore_for_file: use_key_in_widget_constructors
+// ignore_for_file: use_key_in_widget_constructors, use_build_context_synchronously
 
 import 'package:evdeai/constants/appcolors.dart';
 import 'package:evdeai/db_helper/db_helper.dart';
@@ -10,6 +10,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: true,
         backgroundColor: AppColors.appbarColor,
         title: const Text(
@@ -18,7 +19,7 @@ class HomePage extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.logout,
               color: Colors.white,
             ),
@@ -43,8 +44,116 @@ class HomePage extends StatelessWidget {
 
     await Db_Helper.insertAttendance(date, time);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Attendance marked for $date at $time')),
+    final attendanceTime = DateTime(now.year, now.month, now.day, 9, 0);
+    final difference = now.difference(attendanceTime).inMinutes.abs();
+
+    if (difference <= 0) {
+      alertMessage(
+        context,
+        'Good',
+        'Attendance marked on time!',
+        Colors.green,
+      );
+    } else if (now.isAfter(attendanceTime)) {
+      alertMessage(
+        context,
+        'Late',
+        'You are late for attendance!',
+        Colors.red,
+      );
+    } else {
+      alertMessage(
+        context,
+        'Early',
+        'You are early for attendance!',
+        Colors.grey,
+      );
+    }
+  }
+
+  void _markExit(BuildContext context) async {
+    final now = DateTime.now();
+    final exitTime = DateTime(now.year, now.month, now.day, 18, 0);
+    final difference = now.difference(exitTime).inMinutes.abs();
+
+    if (difference <= 0) {
+      // within 5 minutes of exit time
+      alertMessage(
+        context,
+        'Good',
+        'Exit marked on time!',
+        Colors.green,
+      );
+    } else if (now.isAfter(exitTime)) {
+      alertMessage(
+        context,
+        'Late',
+        'You are late for exit!',
+        Colors.red,
+      );
+    } else {
+      alertMessage(
+        context,
+        'Early',
+        'You are early for exit!',
+        Colors.grey,
+      );
+    }
+  }
+
+  // void _markExit(BuildContext context) async {
+  //   final now = DateTime.now();
+  //   final exitTime = DateTime(now.year, now.month, now.day, 23, 0);
+  //   // final date = '${now.year}-${now.month}-${now.day}';
+  //   // final time = '${now.hour}:${now.minute}:${now.second}';
+
+  //   // await Db_Helper.updateExitTime(date, time);
+
+  //   if (now.isAtSameMomentAs(exitTime)) {
+  //     alertMessage(
+  //       context,
+  //       'Good',
+  //       'Exit marked on time!',
+  //       Colors.green,
+  //     );
+  //   } else if (now.isAfter(exitTime)) {
+  //     alertMessage(
+  //       context,
+  //       'Late',
+  //       'You are late for exit!',
+  //       Colors.red,
+  //     );
+  //   } else {
+  //     alertMessage(
+  //       context,
+  //       'Early',
+  //       'You are early for exit!',
+  //       Colors.grey,
+  //     );
+  //   }
+  // }
+
+  void alertMessage(
+      BuildContext context, String title, String message, Color color) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            title,
+            style: TextStyle(color: color, fontWeight: FontWeight.bold),
+          ),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK', style: TextStyle(color: color)),
+            ),
+          ],
+        );
+      },
     );
   }
 
