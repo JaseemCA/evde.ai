@@ -14,7 +14,7 @@ class LoginPage extends StatefulWidget {
 
 class LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   @override
@@ -36,23 +36,22 @@ class LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextFormField(
-                controller: phoneController,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                controller: emailController,
                 decoration: const InputDecoration(
-                  labelText: 'Phone Number',
+                  labelText: 'Email',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your phone number';
-                  } else if (value.length != 10) {
-                    return 'Please enter a valid phone number';
+                    return 'Please enter your Email';
                   }
                   return null;
                 },
-                keyboardType: TextInputType.phone,
               ),
               const SizedBox(height: 16),
               TextFormField(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 controller: passwordController,
                 decoration: const InputDecoration(
                   labelText: 'Password',
@@ -89,10 +88,10 @@ class LoginPageState extends State<LoginPage> {
 
   Future<void> loginUser(BuildContext context) async {
     if (_formKey.currentState?.validate() ?? false) {
-      String phone = phoneController.text;
+      String email = emailController.text;
       String password = passwordController.text;
 
-      bool isValidUser = await Db_Helper.validateUser(phone, password);
+      bool isValidUser = await Db_Helper.validateUser(email, password);
 
       if (isValidUser) {
         ScaffoldMessenger.of(context).showSnackBar(

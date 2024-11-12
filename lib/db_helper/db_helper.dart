@@ -14,33 +14,38 @@ class Db_Helper {
     String path = join(await getDatabasesPath(), 'users.db');
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: (db, version) async {
         await db.execute('''
-          CREATE TABLE users(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            phone TEXT NOT NULL,
-            password TEXT NOT NULL
-          )
-        ''');
+      CREATE TABLE users(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL,
+        phone TEXT NOT NULL,
+        password TEXT NOT NULL
+      )
+    ''');
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          await db.execute('ALTER TABLE users ADD COLUMN email TEXT');
+        }
       },
     );
   }
 
   static Future<void> insertUser(Map<String, dynamic> user) async {
     final db = await database;
-    await db.insert('users', user, conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert('users', user,
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-
- 
-  static Future<bool> validateUser(String phone, String password) async {
+  static Future<bool> validateUser(String email, String password) async {
     final db = await database;
     final result = await db.query(
       'users',
-      where: 'phone = ? AND password = ?',
-      whereArgs: [phone, password],
+      where: 'email = ? AND password = ?',
+      whereArgs: [email, password],
     );
     return result.isNotEmpty;
   }
