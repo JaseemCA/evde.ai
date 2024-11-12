@@ -26,11 +26,14 @@ class SignupState extends State<Signup> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        
+        automaticallyImplyLeading: false,
         backgroundColor: AppColors.appbarColor,
         title: const Text(
           'REGISTER',
-          style: TextStyle(color: AppColors.textColor),
+          style: TextStyle(
+            color: AppColors.textColor,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
       ),
@@ -62,10 +65,12 @@ class SignupState extends State<Signup> {
                   decoration: const InputDecoration(
                       labelText: 'Phone Number', border: OutlineInputBorder()),
                   validator: (value) {
-                    if (value == null || value.isEmpty)
+                    if (value == null || value.isEmpty) {
                       return 'Please enter your phone number';
-                    if (value.length != 10)
+                    }
+                    if (value.length != 10) {
                       return 'Please enter a valid phone number';
+                    }
                     return null;
                   },
                 ),
@@ -82,7 +87,7 @@ class SignupState extends State<Signup> {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
                     }
-                  
+
                     final emailRegex = RegExp(
                         r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
                     if (!emailRegex.hasMatch(value)) {
@@ -123,7 +128,23 @@ class SignupState extends State<Signup> {
                 const SizedBox(height: 24),
                 ElevatedButton(
                   onPressed: () => saveToDatabase(context),
-                  child: const Text('Register'),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: AppColors.buttoncolor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 55),
+                    elevation: 5,
+                  ),
+                  child: const Text(
+                    'Register',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ],
             ),

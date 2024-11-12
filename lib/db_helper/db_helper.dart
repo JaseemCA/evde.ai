@@ -1,6 +1,9 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+// ignore: camel_case_types
 class Db_Helper {
   static Database? _database;
 

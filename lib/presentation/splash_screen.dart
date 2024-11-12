@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:evdeai/constants/appcolors.dart';
 import 'package:evdeai/presentation/auth/login.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +27,6 @@ class SplashScreenState extends State<SplashScreen> {
   }
 
   void _startAnimation() {
-  
     Timer(const Duration(milliseconds: 500), () {
       setState(() {
         opacity = 1.0;
@@ -34,16 +34,19 @@ class SplashScreenState extends State<SplashScreen> {
     });
   }
 
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: AnimatedOpacity(
           opacity: opacity,
-          duration: const Duration(seconds: 3), 
+          duration: const Duration(seconds: 3),
           child: const Text(
-            'Splash Screen',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            'ATTENDANCE REGISTER ',
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: AppColors.appbarColor),
           ),
         ),
       ),

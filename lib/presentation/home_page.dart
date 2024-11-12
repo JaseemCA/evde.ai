@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: AppColors.appbarColor,
         title: const Text(
           'HOME PAGE',
-          style: TextStyle(color: AppColors.textColor),
+          style: TextStyle(color: AppColors.textColor, fontWeight: FontWeight.bold,),
         ),
         actions: [
           IconButton(
@@ -37,8 +37,23 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Center(
         child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.white,
+            backgroundColor: AppColors.buttoncolor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 55),
+            elevation: 5,
+          ),
           onPressed: isAttendanceMarked ? markExit : markAttendance,
-          child: Text(isAttendanceMarked ? 'Mark Exit' : 'Mark Attendance'),
+          child: Text(
+            isAttendanceMarked ? 'Mark Exit' : 'Mark Attendance',
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ),
     );

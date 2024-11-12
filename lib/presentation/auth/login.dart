@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:evdeai/db_helper/db_helper.dart';
 import 'package:evdeai/presentation/home_page.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +28,10 @@ class LoginPageState extends State<LoginPage> {
         backgroundColor: AppColors.appbarColor,
         title: const Text(
           'LOGIN',
-          style: TextStyle(color: AppColors.textColor),
+          style: TextStyle(
+            color: AppColors.textColor,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
       body: Padding(
@@ -69,7 +74,22 @@ class LoginPageState extends State<LoginPage> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () => loginUser(context),
-                child: const Text('Login'),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: AppColors.buttoncolor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 55),
+                  elevation: 5,
+                ),
+                child: const Text(
+                  'Login',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
               TextButton(
                 onPressed: () {
