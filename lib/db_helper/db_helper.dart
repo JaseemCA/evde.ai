@@ -60,7 +60,7 @@ class Db_Helper {
         )
       ''');
 
-        // Create attendance table
+       
         await db.execute('''
         CREATE TABLE attendance(
           id INTEGER PRIMARY KEY AUTOINCREMENT,

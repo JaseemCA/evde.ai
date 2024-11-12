@@ -138,7 +138,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   void logout(BuildContext context) {
-    // Navigate back to the login page to log out
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => LoginPage()));
   }
