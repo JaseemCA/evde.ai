@@ -10,29 +10,70 @@ class Db_Helper {
     return _database!;
   }
 
-  static Future<Database> initDB() async {
-    String path = join(await getDatabasesPath(), 'users.db');
-    return await openDatabase(
-      path,
-      version: 2,
-      onCreate: (db, version) async {
+static Future<Database> initDB() async {
+  String path = join(await getDatabasesPath(), 'users.db');
+  return await openDatabase(
+    path,
+    version: 2,
+    onCreate: (db, version) async {
+      await db.execute('''
+        CREATE TABLE users(
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT NOT NULL,
+          email TEXT NOT NULL,
+          phone TEXT NOT NULL,
+          password TEXT NOT NULL
+        )
+      ''');
+
+      // Create attendance table
+      await db.execute('''
+        CREATE TABLE attendance(
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          date TEXT NOT NULL,
+          time TEXT NOT NULL
+        )
+      ''');
+    },
+    onUpgrade: (db, oldVersion, newVersion) async {
+      if (oldVersion < 2) {
+        await db.execute('ALTER TABLE users ADD COLUMN email TEXT');
         await db.execute('''
-      CREATE TABLE users(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        email TEXT NOT NULL,
-        phone TEXT NOT NULL,
-        password TEXT NOT NULL
-      )
-    ''');
-      },
-      onUpgrade: (db, oldVersion, newVersion) async {
-        if (oldVersion < 2) {
-          await db.execute('ALTER TABLE users ADD COLUMN email TEXT');
-        }
-      },
-    );
-  }
+          CREATE TABLE IF NOT EXISTS attendance(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            date TEXT NOT NULL,
+            time TEXT NOT NULL
+          )
+        ''');
+      }
+    },
+  );
+}
+
+
+  // static Future<Database> initDB() async {
+  //   String path = join(await getDatabasesPath(), 'users.db');
+  //   return await openDatabase(
+  //     path,
+  //     version: 2,
+  //     onCreate: (db, version) async {
+  //       await db.execute('''
+  //     CREATE TABLE users(
+  //       id INTEGER PRIMARY KEY AUTOINCREMENT,
+  //       name TEXT NOT NULL,
+  //       email TEXT NOT NULL,
+  //       phone TEXT NOT NULL,
+  //       password TEXT NOT NULL
+  //     )
+  //   ''');
+  //     },
+  //     onUpgrade: (db, oldVersion, newVersion) async {
+  //       if (oldVersion < 2) {
+  //         await db.execute('ALTER TABLE users ADD COLUMN email TEXT');
+  //       }
+  //     },
+  //   );
+  // }
 
   static Future<void> insertUser(Map<String, dynamic> user) async {
     final db = await database;
@@ -49,4 +90,15 @@ class Db_Helper {
     );
     return result.isNotEmpty;
   }
+
+
+  static Future<void> insertAttendance(String date, String time) async {
+  final db = await database;
+  await db.insert(
+    'attendance',
+    {'date': date, 'time': time},
+    conflictAlgorithm: ConflictAlgorithm.replace,
+  );
+}
+
 }

@@ -26,7 +26,7 @@ class SplashScreenState extends State<SplashScreen> {
   }
 
   void _startAnimation() {
-    // Start the animation after a slight delay
+  
     Timer(const Duration(milliseconds: 500), () {
       setState(() {
         opacity = 1.0;
@@ -40,7 +40,7 @@ class SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: AnimatedOpacity(
           opacity: opacity,
-          duration: const Duration(seconds: 2), // Duration of fade-in animation
+          duration: const Duration(seconds: 3), 
           child: const Text(
             'Splash Screen',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
