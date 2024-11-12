@@ -1,30 +1,50 @@
+import 'dart:async';
+
 import 'package:evdeai/presentation/auth/login.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  SplashScreenState createState() => SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class SplashScreenState extends State<SplashScreen> {
+  double opacity = 0.0;
   @override
   void initState() {
     super.initState();
+    _startAnimation();
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
+        // ignore: use_build_context_synchronously
         context,
         MaterialPageRoute(builder: (context) => LoginPage()),
       );
     });
   }
 
-  @override
+  void _startAnimation() {
+    // Start the animation after a slight delay
+    Timer(const Duration(milliseconds: 500), () {
+      setState(() {
+        opacity = 1.0;
+      });
+    });
+  }
+
+ @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: Text(
-          'Splash Screen',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        child: AnimatedOpacity(
+          opacity: opacity,
+          duration: const Duration(seconds: 2), // Duration of fade-in animation
+          child: const Text(
+            'Splash Screen',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
         ),
       ),
     );
